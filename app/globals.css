@@ -24,3 +24,26 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Thêm CSS nav và ul */
+nav {
+  display: flex;
+  align-items: center; /* Căn giữa dọc */
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center; /* Căn giữa từng item trong ul */
+}
+
+/* Bỏ gạch chân dưới thẻ Link */
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  text-decoration: underline !important;
+}
