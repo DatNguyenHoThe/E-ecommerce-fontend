@@ -4,6 +4,7 @@ import MainBanners from "./ui/MainBanners";
 import PromoBox from "./ui/PromoBox";
 import CategoryBox from "./ui/CategoryBox";
 import ProductBox from "./ui/ProductBox";
+import FlashSaleBox from "./ui/FlashSaleBox";
 
 
 
@@ -98,6 +99,9 @@ export default function Home() {
           ))}
         </div>
         <div>
+          <FlashSaleBox />
+        </div>
+        <div>
           <ProductBox 
           title="Sản phẩm bán chạy"
           type="bestsale"
@@ -112,13 +116,19 @@ export default function Home() {
         <div>
           <ProductBox 
           title="Laptop"
-          type="lap-top"
+          type="laptop"
           />
         </div>
         <div>
           <ProductBox 
           title="Chuột máy tính"
           type="chuot"
+          />
+        </div>
+        <div>
+          <ProductBox 
+          title="Bàn Phím"
+          type="ban-phim"
           />
         </div>
         

@@ -1,11 +1,12 @@
 'use client'
 
-import { env } from '@/libs/env.helper'
-import axios from 'axios'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import axios from 'axios'
+import { env } from '@/libs/env.helper'
+import Link from 'next/link'
+import FlashSaleCD from './FlashSaleCD'
 
 
 interface IAttribute{
@@ -37,7 +38,6 @@ type TProduct = {
     brand: object,
     vendor: object
 }
-
 
 const ProductItem = ({product}:{product:TProduct}) => {
     const router = useRouter();
@@ -82,49 +82,66 @@ const ProductItem = ({product}:{product:TProduct}) => {
             <div className="flex items-center gap-x-1 text-yellow-500">
                 <span className="font-semibold text-black">{product.rating.toFixed(1)}</span>
                 <span>★</span>
-                <span className="text-sm text-gray-600">(1 đánh giá)</span>
+                <span className="text-sm text-gray-600">(0 đánh giá)</span>
             </div>
         </div>
     )
 }
 
-export default function ProductBox({title, type}:{title: string, type:string}) {
-    //getall product
-const fetchProduct = async(): Promise<TProduct[]> => {
-    const response = await axios.get(`${env.API_URL}/collections/${type}`);
-    console.log('fetchProduct===>', response?.data?.data.products)
-    return response?.data?.data.products;
+export default function FlashSaleBox() {
+    //getall product flashsale
+const fetchProduct = async() => {
+    const response = await axios.get(`${env.API_URL}/collections/flashsale`);
+    console.log('fetchProduct Flash Sale ===>', response?.data?.data.products)
+    return response?.data?.data;
 }
     //khai báo state products
-    const [products, setProducts] = useState<TProduct[]>([])
+    const [data, setData] = useState({
+        products: [],
+        pagination: {
+            totalRecord: 0,
+            limit: 20,
+            page: 1
+        }
+    })
 
     useEffect(() => {
         const getProducts = async() => {
             try {
                 const data = await fetchProduct();
-                setProducts(data);
+                setData(data);
             } catch (error) {
                 console.error('fetching error products', error);
             }
         };
         getProducts();
     },[]);
-
+    console.log('totalRecord ===>', data?.pagination?.totalRecord);
   return (
-    <div className='bg-white mb-2 p-2'>
-        <div className='flex justify-between'>
-            <h1 className='font-bold text-2xl px-2 py-4 text-gray-900 hover:text-red-500 cursor-pointer'>{title}</h1>
-            <div className='flex px-2 py-4 items-center text-blue-500 font-bold'>
-                <Link href={`/collections/${type}`}>Xem tất cả</Link>
+    <div className='rounded-sm'>
+        <div className='flex justify-between p-5 bg-blue-700 rounded-t-sm'>
+            <div className='flex gap-x-3 items-center'>
+                <span><FlashSaleCD /></span>
+                <h1 className='text-2xl font-bold text-yellow-300'>FLASH SALE 10H MỖI NGÀY</h1>
+            </div>
+            <div className='w-10 h-10 px-1 py-1 bg-white rounded-sm font-bold flex items-center justify-center'>
+                {data?.pagination?.totalRecord}
             </div>
         </div>
-        <div className='grid grid-cols-5 gap-x-3'>
-            {products.map((p) => (
-                <ProductItem
-                key={p._id}
-                product={p}
-                />
-            ))}
+        <div className='grid grid-cols-1 bg-blue-500 mb-2 p-2 rounded-b-sm gap-y-2'>
+            <div className='grid grid-cols-5 gap-x-3'>
+                {data.products.map((p: TProduct) => (
+                    <ProductItem
+                    key={p._id}
+                    product={p}
+                    />
+                ))}
+            </div>
+            <div className='flex justify-center'>
+                <button className='px-4 py-1 bg-black text-white font-bold rounded-md'>
+                    <Link href='/collections/flashsale'>Xem tất cả sản phẩm</Link>
+                </button>
+            </div>
         </div>
     </div>
   )

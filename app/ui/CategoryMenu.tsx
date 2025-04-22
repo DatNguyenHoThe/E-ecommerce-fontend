@@ -8,7 +8,7 @@ const categories = [
     name: "Laptop",
     icon: <Laptop className="h-4 w-4" />,
     subcategories: [
-      { name: "Thương hiệu", items: ["ASUS", "ACER", "MSI", "LENOVO", "DELL", "HP-Pavilion", "LG-Gram"] },
+      { name: "Thương hiệu", items: ["ASUS", "ACER", "MSI", "LENOVO", "DELL", "HP-Pavilion", "LG-Gram"]},
       { name: "Giá bán", items: ["Dưới 15 triệu", "Từ 15 triệu đến 20 triệu", "Trên 20 triệu"] },
       { name: "CPU Intel - AMD", items: ["Intel Core i3", "Intel Core i5", "Intel Core i7", "AMD Ryzen"] },
       { name: "Nhu cầu sử dụng", items: ["Đồ họa - Studio", "Học sinh - Sinh viên", "Mỏng nhẹ cao cấp"] },
@@ -109,7 +109,7 @@ const categories = [
       { name: "Độ phân giải", items: ["Màn hình Full HD", "Màn hình 2K 1440p", "Màn hình 4K UHD", "Màn hình 6K"] },
       { name: "Tần số quét", items: ["60Hz", "75Hz", "100Hz", "144Hz", "240Hz"] },
       { name: "Màn hình cong", items: ["24\" Curved", "27\" Curved", "32\" Curved", "Trên 32\" Curved"] },
-      { name: "Kích thước", items: ["Màn hình 22\"", "Màn hình 24\"", "Màn hình 27\"", "Màn hình 29\"", "Màn hình 32\"", "Màn hình trên 32\"", "Hỗ trợ giá reo (VESA)"] },
+      { name: "Kích thước", items: ["Màn hình 22\"", "Màn hình 24\"", "Màn hình 27\"", "Màn hình 29\"", "Màn hình 32\"", "Màn hình trên 32\""] },
       { name: "Màn hình đồ họa", items: ["Màn hình đồ họa 24\"", "Màn hình đồ họa 27\"", "Màn hình đồ họa 32\""] },
       { name: "Phụ kiện màn hình", items: ["Giá treo màn hình", "Phụ kiện dây HDMI,DP,LAN"] },
       { name: "Màn hình di động", items: ["Full HD 1080p", "2K 1440p", "Có cảm ứng"] },
@@ -234,7 +234,7 @@ export function CategoryMenu() {
               {/* Submenu */}
               {activeCategory === category.name && (
                 <div
-                  className="absolute left-full top-0 w-[944px] h-[577px] bg-white border rounded-md shadow-md z-50"
+                  className="absolute left-full top-0 w-[944px] h-[480px] bg-white border rounded-md shadow-md z-49"
                   style={{ marginLeft: "5px" }}
                 >
                   <div className="p-4">

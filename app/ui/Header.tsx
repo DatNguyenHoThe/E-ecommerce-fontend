@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import MenuHeader from './MenuHeader'
 import IconHeader from './IconHeader'
+import Link from 'next/link'
 
 export default function Header() {
   return (
@@ -16,13 +17,15 @@ export default function Header() {
     </div>
     <div className='h-18 bg-[#E30019] flex items-center justify-center sticky top-0 left-0 w-full z-50'>
       <div className='w-[1200px] h-[42px] flex gap-x-3'>
-        <div className='relative w-35 block'>
+        <Link 
+        href='/'
+        className='relative w-[140px] h-[42px] block'>
           <Image
             alt='logo'
             src='http://localhost:8889/uploads/logos/logo_header.png'
             fill
           />
-        </div>
+        </Link>
         <MenuHeader />
         <div className="flex items-center bg-white border border-gray-300 rounded-sm px-4 py-2 w-full max-w-md shadow-sm">
           <input
