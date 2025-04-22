@@ -1,103 +1,131 @@
 import Image from "next/image";
+import { CategoryMenu } from "./ui/CategoryMenu";
+import MainBanners from "./ui/MainBanners";
+import PromoBox from "./ui/PromoBox";
+import CategoryBox from "./ui/CategoryBox";
+import ProductBox from "./ui/ProductBox";
+
+
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  
+  const promoBoxs = [
+    {
+      name: 'thang_04_layout_web__01',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__01.webp',
+      link: '/pages/bang-gia-thu-san-pham-cu'
+    },
+    {
+      name: 'thang_04_layout_web__02',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__02.webp',
+      link: '/products/ban-phim'
+    },
+    {
+      name: 'thang_04_layout_web__03',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__03.webp',
+      link: '/products/pc-gvn-intel-i5-4060'
+    },
+    {
+      name: 'thang_04_layout_web__04',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__04.webp',
+      link: '/products/lap-top-gaming'
+    },
+    {
+      name: 'thang_04_layout_web__05',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__05.webp',
+      link: '/products/lap-top-van-phong'
+    },
+    {
+      name: 'thang_04_banner_ver_2024_500x250',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_banner_ver_2024_500x250.webp',
+      link: '/pages/gvn-gaming-festival'
+    },
+    {
+      name: 'thang_04_layout_web__06',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__06.webp',
+      link: '/products/man-hinh'
+    },
+    {
+      name: 'thang_04_layout_web__07',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__07.webp',
+      link: '/products/chuot'
+    },
+    {
+      name: 'thang_04_layout_web__08',
+      imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__08.webp',
+      link: '/products/pc-gvn-intel-i5-rx6600'
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="grid justify-center bg-gray-100 pt-2 pb-2">
+      <div className="w-[1200px]">
+        <div className="flex gap-x-2">
+          <CategoryMenu />
+          <div>
+            <MainBanners />
+            <div className="h-[163px] flex gap-x-5">
+              {promoBoxs.slice(3,5).map((item, index) => (
+                <PromoBox 
+                  key={index}
+                  name={item.name}
+                  imgUri={item.imgUri}
+                  link={item.link}
+                />
+              ))}
+            </div> 
+          </div>
+          <div className="h-[326px] grid grid-cols-1 gap-y-5">
+            {promoBoxs.slice(0,3).map((item, index) => (
+              <PromoBox 
+                key={index}
+                name={item.name}
+                imgUri={item.imgUri}
+                link={item.link}
+              />
+            ))}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+        <div className="h-[163px] flex gap-x-5">
+          {promoBoxs.slice(5,9).map((item, index) => (
+            <PromoBox 
+              key={index}
+              name={item.name}
+              imgUri={item.imgUri}
+              link={item.link}
+            />
+          ))}
+        </div>
+        <div>
+          <ProductBox 
+          title="Sản phẩm bán chạy"
+          type="bestsale"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+        </div>
+        <div>
+          <ProductBox 
+          title="PC"
+          type="pc"
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+        </div>
+        <div>
+          <ProductBox 
+          title="Laptop"
+          type="lap-top"
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+        <div>
+          <ProductBox 
+          title="Chuột máy tính"
+          type="chuot"
+          />
+        </div>
+        
+        <div>
+          <CategoryBox />
+        </div>
+      </div>
     </div>
   );
 }
