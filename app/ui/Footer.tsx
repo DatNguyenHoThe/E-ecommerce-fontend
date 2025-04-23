@@ -8,46 +8,46 @@ export default function Footer() {
       <div className='h-62 flex justify-center'>
         <div className='w-[1200px] grid grid-cols-12 mt-6 mb-6 text-[14px]'>
           <div className='col-span-2 grid grid-rows-6 items-center'>
-            <h1 className='font-bold'>VỀ GEARVN</h1>
-            <p><Link href='/pages/gioi-thieu'>Giới thiệu</Link></p>
-            <p><Link href='/pages/tuyen-dung'>Tuyển dụng</Link></p>
-            <p><Link href='/pages/lien-he'>Liên hệ</Link></p>
+            <h1 className='font-bold hover:text-red-500 cursor-pointer'>VỀ GEARVN</h1>
+            <p className='hover:text-red-500'><Link href='/pages/gioi-thieu'>Giới thiệu</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/tuyen-dung'>Tuyển dụng</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/lien-he'>Liên hệ</Link></p>
           </div>
           <div className='col-span-2 grid grid-rows-6 items-center'>
-            <h1 className='font-bold'>CHÍNH SÁCH</h1>
-            <p><Link href='/pages/chinh-sach-bao-hanh'>Chính sách bảo hành</Link></p>
-            <p><Link href='/pages/chinh-sach-giao-hang'>Chính sách giao hàng</Link></p>
-            <p><Link href='/pages/chinh-sach-bao-mat'>Chính sách bảo mật</Link></p>
+            <h1 className='font-bold hover:text-red-500 cursor-pointer'>CHÍNH SÁCH</h1>
+            <p className='hover:text-red-500'><Link href='/pages/chinh-sach-bao-hanh'>Chính sách bảo hành</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/chinh-sach-giao-hang'>Chính sách giao hàng</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/chinh-sach-bao-mat'>Chính sách bảo mật</Link></p>
           </div>
           <div className='col-span-2 grid grid-rows-6 items-center'>
-            <h1 className='font-bold'>THÔNG TIN</h1>
-            <p><Link href='/pages/he-thong-cua-hang'>Hệ thống cửa hàng</Link></p>
-            <p><Link href='/pages/huong-dan-mua-hang'>Hướng dẫn mua hàng</Link></p>
-            <p><Link href='/pages/huong-dan-thanh-toan'>Hướng dẫn thanh toán</Link></p>
-            <p><Link href='/pages/huong-dan-tra-gop'>Hướng dẫn trả góp</Link></p>
-            <p><Link href='/pages/tra-cuu-dia-chi-bao-hanh'>Tra cứu địa chỉ bảo hành</Link></p>
+            <h1 className='font-bold hover:text-red-500 cursor-pointer'>THÔNG TIN</h1>
+            <p className='hover:text-red-500'><Link href='/pages/he-thong-cua-hang'>Hệ thống cửa hàng</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/huong-dan-mua-hang'>Hướng dẫn mua hàng</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/huong-dan-thanh-toan'>Hướng dẫn thanh toán</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/huong-dan-tra-gop'>Hướng dẫn trả góp</Link></p>
+            <p className='hover:text-red-500'><Link href='/pages/tra-cuu-dia-chi-bao-hanh'>Tra cứu địa chỉ bảo hành</Link></p>
           </div>
           <div className='col-span-3 grid grid-rows-6 items-center'>
-            <h1><strong>TỔNG ĐÀI HỖ TRỢ</strong> <span>(8:00 - 21:00)</span></h1>
+            <h1 className='hover:text-red-500 cursor-pointer'><strong>TỔNG ĐÀI HỖ TRỢ</strong> <span>(8:00 - 21:00)</span></h1>
             <div className='flex gap-x-1'>
               <p className='w-18'>Mua hàng: </p>
-              <Link href='/pages/lien-he'><span className='font-bold text-[#1982F9]'>1900.5301</span></Link>
+              <Link href='/pages/lien-he'><span className='font-bold text-[#1982F9] hover:text-red-500'>1900.5301</span></Link>
             </div>
             <div className='flex gap-x-1'>
               <p className='w-18'>Bảo hành: </p>
-              <Link href='/pages/lien-he'><span className='font-bold text-[#1982F9]'>1900.5325</span></Link>
+              <Link href='/pages/lien-he'><span className='font-bold text-[#1982F9] hover:text-red-500'>1900.5325</span></Link>
             </div>
             <div className='flex gap-x-1'>
               <p className='w-18'>Khiếu nại: </p>
-              <Link href='/pages/lien-he'><span className='font-bold text-[#1982F9]'>1800.6173</span></Link>
+              <Link href='/pages/lien-he'><span className='font-bold text-[#1982F9] hover:text-red-500'>1800.6173</span></Link>
             </div>
             <div className='flex gap-x-1'>
               <p className='w-18'>Email: </p>
-              <Link href='https://mail.google.com'><span className='font-bold text-[#1982F9]'>cskh@gearvn.com</span></Link>
+              <Link href='https://mail.google.com'><span className='font-bold text-[#1982F9] hover:text-red-500'>cskh@gearvn.com</span></Link>
             </div>
           </div>
           <div className='col-span-3 grid grid-rows-6 items-center'>
-            <h1 className='font-bold'>ĐƠN VỊ VẬN CHUYỂN</h1>
+            <h1 className='font-bold hover:text-red-500 cursor-pointer'>ĐƠN VỊ VẬN CHUYỂN</h1>
             <div className='flex gap-0.5'>
               <Image
               alt='ship_1'
@@ -74,7 +74,7 @@ export default function Footer() {
               height={35}
               />
             </div>
-            <h1 className='font-bold'>PHƯƠNG THỨC THANH TOÁN</h1>
+            <h1 className='font-bold hover:text-red-500 cursor-pointer'>PHƯƠNG THỨC THANH TOÁN</h1>
             <div className='flex gap-0.5'>
               <Image
               alt='pay_1'

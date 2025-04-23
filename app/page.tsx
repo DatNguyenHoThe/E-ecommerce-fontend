@@ -5,6 +5,7 @@ import PromoBox from "./ui/PromoBox";
 import CategoryBox from "./ui/CategoryBox";
 import ProductBox from "./ui/ProductBox";
 import FlashSaleBox from "./ui/FlashSaleBox";
+import TechBoxSmall from "./ui/techNew/TechBoxSmall";
 
 
 
@@ -134,6 +135,9 @@ export default function Home() {
         
         <div>
           <CategoryBox />
+        </div>
+        <div>
+          <TechBoxSmall />
         </div>
       </div>
     </div>

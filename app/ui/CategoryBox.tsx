@@ -62,7 +62,7 @@ export default function CategoryBox() {
   return (
     <div className='bg-white'>
         <div>
-            <h1 className='font-bold text-2xl px-2 py-4 text-gray-900 hover:text-red-500 cursor-pointer mb-4'>Danh mục sản phẩm</h1>
+            <h1 className='font-bold text-2xl px-2 py-4 text-gray-900 hover:text-red-500 cursor-pointer'>Danh mục sản phẩm</h1>
             <hr/>
         </div>
         <div className="grid grid-cols-10 gap-4 px-2 py-4 cursor-pointer">

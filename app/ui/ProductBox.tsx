@@ -6,6 +6,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 
 interface IAttribute{
@@ -74,7 +79,7 @@ const ProductItem = ({product}:{product:TProduct}) => {
                     <span className='text-red-500 font-bold'>
                         {product.salePrice.toLocaleString()}₫
                     </span>
-                    <span className='text-red-500 font-semibold text-[13px] border-1 border-red-500 px-1 bg-red-50 rounded-sm'>
+                    <span className='flex items-center text-red-500 font-semibold text-[13px] border-1 border-red-500 px-1 bg-red-50 rounded-sm'>
                         -{Math.round(((product.price - product.salePrice) / product.price) * 100)}%
                     </span>
                 </div>   
@@ -118,13 +123,24 @@ const fetchProduct = async(): Promise<TProduct[]> => {
                 <Link href={`/collections/${type}`}>Xem tất cả</Link>
             </div>
         </div>
-        <div className='grid grid-cols-5 gap-x-3'>
+        <div className='flex'>
+            <Swiper
+             modules={[Navigation, Pagination]} // Kích hoạt các module
+             navigation
+             pagination={{ clickable: true }}
+             spaceBetween={5}
+             slidesPerView={1}
+             >               
             {products.map((p) => (
-                <ProductItem
-                key={p._id}
-                product={p}
-                />
+                <SwiperSlide 
+                key={p._id}>
+                    <ProductItem
+                    key={p._id}
+                    product={p}
+                    />
+                </SwiperSlide>
             ))}
+            </Swiper>
         </div>
     </div>
   )
