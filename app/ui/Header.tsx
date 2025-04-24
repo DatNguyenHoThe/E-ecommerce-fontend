@@ -3,6 +3,7 @@ import React from 'react'
 import MenuHeader from './MenuHeader'
 import IconHeader from './IconHeader'
 import Link from 'next/link'
+import UserInfo from './user/UserInfo'
 
 export default function Header() {
   return (
@@ -27,7 +28,7 @@ export default function Header() {
           />
         </Link>
         <MenuHeader />
-        <div className="flex items-center bg-white border border-gray-300 rounded-sm px-4 py-2 w-full max-w-md shadow-sm">
+        <div className="flex items-center bg-white border border-gray-300 rounded-sm px-4 py-2 w-[365px] max-w-md shadow-sm">
           <input
             type="text"
             placeholder="Bạn cần tìm gì?"
@@ -65,11 +66,7 @@ export default function Header() {
         />
       </div>
         <div className='flex items-center text-white font-bold gap-x-1 px-2 bg-[#be0117] rounded-sm'>
-          <IconHeader 
-          icon = {<i className="bi bi-person"></i>}
-          title = {<>Đăng<br />nhập</>}
-          url = '/login'
-          />
+          <UserInfo />
         </div>
       </div>
     </div>
