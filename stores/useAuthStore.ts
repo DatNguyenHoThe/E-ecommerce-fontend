@@ -7,11 +7,17 @@ interface ITokens {
 }
 
 interface IUser {
+    _id: string,
     email: string,
     userName: string,
     fullName: string,
     avatarUrl: string,
-    lastLogin: Date
+    lastLogin: Date,
+    roles: string,
+    status: string,
+    gender?: string,
+    phone?: string,
+    birthDay?: string
 }
 
 interface IAuthStore {

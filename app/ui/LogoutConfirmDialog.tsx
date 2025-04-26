@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
 import { useState } from "react";
 
 export default function LogoutConfirmDialog({

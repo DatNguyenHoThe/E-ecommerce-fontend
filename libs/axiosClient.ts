@@ -1,13 +1,13 @@
 import axios from "axios";
 import { env } from "../libs/env.helper";
 import { useAuthStore } from "../stores/useAuthStore";
-const API_URL = `${env.API_URL}/v1/auth`;
+const API_URL = `${env.API_URL}/auth`;
 
 const axiosClient = axios.create({
   baseURL: API_URL,
-  // headers: {
-  //   "Content-Type": "application/json",
-  // },
+   headers: {
+    "Content-Type": "application/json",
+   },
 });
 
 // REQUEST
