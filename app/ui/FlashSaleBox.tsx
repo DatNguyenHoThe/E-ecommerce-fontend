@@ -74,7 +74,7 @@ const ProductItem = ({product}:{product:TProduct}) => {
                     <span className='text-red-500 font-bold'>
                         {product.salePrice.toLocaleString()}₫
                     </span>
-                    <span className='text-red-500 font-semibold text-[13px] border-1 border-red-500 px-1 bg-red-50 rounded-sm'>
+                    <span className='text-red-500 font-semibold text-[13px] border-1 border-red-500 px-1 bg-red-50 rounded-sm flex justify-center'>
                         -{Math.round(((product.price - product.salePrice) / product.price) * 100)}%
                     </span>
                 </div>   

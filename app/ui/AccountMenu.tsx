@@ -105,7 +105,7 @@ export default function AccountMenu() {
           <span className="grid relative w-[50px] h-[50px] bg-red-500">
             <Image
               alt={user?.fullName}
-              src={user?.avatarUrl}
+              src={user?.avatarUrl || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
               fill
               className="rounded-full"
             />

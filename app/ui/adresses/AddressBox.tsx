@@ -24,6 +24,7 @@ export default function AddressBox() {
     const [addresses, setAddresses] = useState<IAddress[]>([]);
     const {user} = useAuthStore();
 
+    //-------------------//BEGIN GET ALL ADDRESS//--------------------//
     //fetch dữ liệu từ adresses về
       const fetchAddresses = async():Promise<IAddress[] | undefined> => {
         try {
@@ -42,6 +43,9 @@ export default function AddressBox() {
         }
         getAddresses();
       },[user?._id]);
+    //-------------------//END GET ALL ADDRESS//--------------------//
+
+    //-------------------//BEGIN DELETE ADDRESS//--------------------//
 
       //gọi API delete address
       const deleteAddress = async(id: string) => {
@@ -65,6 +69,10 @@ export default function AddressBox() {
           if (updated) setAddresses(updated);
         }
       }
+
+      //-------------------//END DELETE ADDRESS//--------------------//
+
+      //-------------------//BEGIN UPDATE ADDRESS//--------------------//
 
       //goi API update address
       const updateAddress = async(id: string, values: IAddress) => {
@@ -91,28 +99,59 @@ export default function AddressBox() {
           if(update) setAddresses(update);
         }
       }
+
+      //-------------------//END UPDATE ADDRESS//--------------------//
+
+      //-------------------//BEGIN ISDEFAULT = TRUE//--------------------//
+
+      //gọi API update isDeafault = true
+      const updateIsDeafault = async(id: string) => {
+        try {
+          const response = await axiosClient.put(`${env.API_URL}/addresses/isDefault/${id}`);
+          if(response.status === 200) {
+            alert('Đặt làm mạc định thành công');
+            return response.data;
+          }
+        } catch (error) {
+          console.error('update isDeafault is failed', error)
+        }
+      }
+      //gọi hàm update isDeafault = true
+      const handleIsDefault = async(id: string) => {
+        const response = await updateIsDeafault(id);
+        if(response) {
+          const update = await fetchAddresses();
+          if(update) setAddresses(update);
+        }
+      };
+      //-------------------//END ISDEFAULT = TRUE//--------------------//
     
       const AddressItem = (
         {
           id,
           values,
           onHandleDelete,
+          onHandleIsDefault
         }:{
           id: string,
           values : IAddress, 
-          onHandleDelete: ()=>void
+          onHandleDelete: () => void,
+          onHandleIsDefault: () => void
         }
         ) => {
-        let className = 'border border-gray-300 px-2 py-1 rounded-sm text-center text-gray-300';
+        let className = 'border border-gray-300 px-2 py-1 rounded-sm text-center text-gray-300 cursor-pointer';
         if(values.isDefault) {
-          className = 'border border-red-500 px-2 py-1 rounded-sm text-center'
+          className = 'border border-red-500 px-2 py-1 rounded-sm text-center text-red-500 cursor-pointer'
         }
 
         return (
           <div className='w-full flex justify-between px-6 py-1'>
             <div>
               <div className='flex'>
-                <span className={className}>Mạc định</span>
+                <span 
+                className={className}
+                onClick={onHandleIsDefault}
+                >Mạc định</span>
                 <span className='flex font-bold items-center px-3 border-r border-gray-500'>{values.fullName}</span>
                 <span className='flex items-center px-3'>{values.phoneNumber}</span>
               </div>
@@ -135,11 +174,10 @@ export default function AddressBox() {
       {addresses.map((a) => (
         <AddressItem 
         key={a._id}
-        values={a}
-        onHandleDelete={() => {
-          handleDelete(a._id);
-        }}
         id={a._id}
+        values={a}
+        onHandleDelete={() => {handleDelete(a._id)}}
+        onHandleIsDefault={() => {handleIsDefault(a._id)}}
         />
       ))}
     </div>

@@ -9,6 +9,7 @@ import axios from "axios"
 import { env } from "@/libs/env.helper"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import RegisterButton from "../ui/buton/RegisterButton"
 
 export default function LoginpPage() {
   const {setTokens, setUser} = useAuthStore();
@@ -76,9 +77,8 @@ export default function LoginpPage() {
               Đăng nhập
             </Button>
           </div>
-          <p className="text-center text-sm text-gray-500">
-            Chưa có tài khoản? <a href="/register" className="text-blue-600 hover:underline">Đăng ký</a>
-          </p>
+          <RegisterButton />
+          
         </CardContent>
       </Card>
     </div>
