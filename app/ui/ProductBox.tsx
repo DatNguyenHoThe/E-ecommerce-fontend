@@ -129,7 +129,7 @@ const fetchProduct = async(): Promise<TProduct[]> => {
              navigation
              pagination={{ clickable: true }}
              spaceBetween={5}
-             slidesPerView={1}
+             slidesPerView={5}
              >               
             {products.map((p) => (
                 <SwiperSlide 

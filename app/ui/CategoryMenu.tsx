@@ -120,7 +120,6 @@ const categories = [
     icon: <Keyboard className="h-4 w-4" />,
     subcategories: [
       { name: "Thương hiệu", items: ["ANKKO", "AULA", "Dare-U", "Durgod", "FL-Esports", "Corsair", "E-Dra", "Cidoo", "Machenike"] },
-      { name: "Thương hiệu", items: ["ASUS", "Logitech", "Razer", "Leopold", "Steelseries", "Rapoo", "VGN"] },
       { name: "Giá tiền", items: ["Dưới 1 triệu", "1 triệu - 2 triệu", "2 triệu - 3 triệu", "3 triệu - 4 triệu", "Trên 4 triệu"] },
       { name: "Kết nối", items: ["Bluetooth", "Wireless"] },
       { name: "Phụ kiện bàn phím cơ", items: ["Keycaps", "Dwarf Factory", "Kê tay"] },
@@ -131,7 +130,6 @@ const categories = [
     icon: <Mouse className="h-4 w-4" />,
     subcategories: [
       { name: "Thương hiệu", items: ["Logitech", "Razer", "Corsair", "Pulsar", "Microsoft", "Dare U"] },
-      { name: "Thương hiệu", items: ["ASUS", "Steelseries", "Glorious", "Rapoo"] },
       { name: "Chuột theo giá tiền", items: ["Dưới 500 nghìn", "Từ 500 nghìn - 1 triệu", "Trên 2 triệu - 3 triệu", "Trên 3 triệu"] },
       { name: "Loại chuột", items: ["Chuột chơi game", "Chuột văn phòng"] },
       { name: "Logitech", items: ["Logitech Gaming", "Logitech Văn phòng"] },
@@ -145,7 +143,6 @@ const categories = [
     icon: <Headphones className="h-4 w-4" />,
     subcategories: [
       { name: "Thương hiệu", items: ["ASUS", "HyperX", "Corsair", "Razer"] },
-      { name: "Thương hiệu", items: ["Steelseries", "Rapoo", "Logitech", "Edifier"] },
       { name: "Tai nghe theo giá", items: ["Dưới 1 triệu", "Từ 1 triệu - 2 triệu", "Từ 2 triệu - 3 triệu", "Từ 3 triệu - 4 triệu", "Trên 4 triệu"] },
       { name: "Kiểu kết nối", items: ["Tai nghe Wireless", "Tai nghe Bluetooth"] },
       { name: "Kiểu tai nghe", items: ["Tai nghe Over-ear", "Tai nghe Gaming In-ear"] },

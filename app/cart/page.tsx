@@ -173,29 +173,30 @@ export default function CartPage() {
         
         <div className="bg-white p-2 rounded-sm">
           <div className="flex w-full h-22 bg-red-50 justify-center items-center gap-x-18">
-            <div 
-            onClick={() => setStep("cart")}
+            <div
+            key="cart"
             className="flex flex-col gap-y-1 justify-center items-center cursor-pointer">
-              <span className="text-gray-600"><ShoppingCart /></span>
-              <span className="text-gray-600">Giỏ hàng</span>
+              <span className={step === "cart" ? "text-red-500 font-bold" : "text-gray-600"}><ShoppingCart /></span>
+              <span className={step === "cart" ? "text-red-500 font-bold" : "text-gray-600"}>Giỏ hàng</span>
             </div>
             <div 
-            onClick={() => setStep("info")}
+            key="info"
             className="flex flex-col gap-y-1 justify-center items-center cursor-pointer">
-              <span className="text-gray-600"><IdCard /></span>
-              <span className="text-gray-600">Thông tin đặt hàng</span>
+              <span className={step === "info" ? "text-red-500 font-bold" : "text-gray-600"}><IdCard /></span>
+              <span className={step === "info" ? "text-red-500 font-bold" : "text-gray-600"}>Thông tin đặt hàng</span>
             </div>
             <div 
             onClick={() => setStep("payment")}
+            key="payment"
             className="flex flex-col gap-y-1 justify-center items-center cursor-pointer">
-              <span className="text-gray-600"><CreditCard /></span>
-              <span className="text-gray-600">Thanh toán</span>
+              <span className={step === "payment" ? "text-red-500 font-bold" : "text-gray-600"}><CreditCard /></span>
+              <span className={step === "payment" ? "text-red-500 font-bold" : "text-gray-600"}>Thanh toán</span>
             </div>
             <div 
-            onClick={() => setStep("done")}
+            key="done"
             className="flex flex-col gap-y-1 justify-center items-center cursor-pointer">
-              <span className="text-gray-600"><ShieldCheck /></span>
-              <span className="text-gray-600">Hoàn tất</span>
+              <span className={step === "done" ? "text-red-500 font-bold" : "text-gray-600"}><ShieldCheck /></span>
+              <span className={step === "done" ? "text-red-500 font-bold" : "text-gray-600"}>Hoàn tất</span>
             </div>
           </div>
         </div>
@@ -236,7 +237,7 @@ export default function CartPage() {
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.4 }}
             >
-              <PaymentComponent onNext={() => setStep("info")} />
+              <PaymentComponent onNext={() => setStep("done")} />
             </motion.div>
           )}
           {step === "done" && (
@@ -247,7 +248,7 @@ export default function CartPage() {
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.4 }}
             >
-              <DoneComponent onBack={() => setStep("done")} />
+              <DoneComponent />
             </motion.div>
           )}
       </AnimatePresence>
