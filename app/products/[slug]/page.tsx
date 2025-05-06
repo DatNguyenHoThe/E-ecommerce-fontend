@@ -15,7 +15,7 @@ interface Product {
   category: ICategory;
   attributes: (string | { name: string; value: string; time?: string })[];
   rating: number;
-  Brand: Brand;
+  brand: Brand;
   reviewCount: number;
   tags: string[];
   originalPrice?: number;

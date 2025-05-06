@@ -20,7 +20,7 @@ interface ProductCardProps {
     };
     attributes: (string | { name: string; value: string })[];
     rating: number;
-    Brand: {
+    brand: {
       _id: string;
       brand_name: string;
     };
@@ -106,7 +106,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
             ) : (
               // Fallback to showing brand if no specs are available
               <div className="flex items-center gap-1 text-sm text-gray-600">
-                <span>🏷️ {product.Brand?.brand_name || "Brand"}</span>
+                <span>{product.brand?.brand_name}</span>
               </div>
             )}
           </div>
