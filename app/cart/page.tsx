@@ -16,20 +16,14 @@ import DoneComponent from "../ui/cart/DoneComponent";
 interface IProduct {
   _id: string;
   product_name: string;
-}
-
-interface IProductVariant {
-  _id: string;
-  variantName: string;
   price: number;
   salePrice: number;
   images: string[];
-  product: IProduct;
 }
 
 interface ICartItem {
   _id: string;
-  productVariant: IProductVariant;
+  product: IProduct;
   quantity: number;
   currentPrice: number;
   currentSalePrice: number;
@@ -44,7 +38,19 @@ interface ICart {
 }
 
 export default function CartPage() {
-  const [step, setStep] = useState<"cart" | "info" | "payment" | "done">("cart");
+  const [step, setStep] = useState<"cart" | "info" | "payment" | "done">(
+    () => localStorage.getItem("cartStep") as "cart" | "info" | "payment" | "done" || "cart"
+  ); // lưu vào localstorage để khi f5 thì vẩn ở bước hiện tại của giỏ hàng
+  // Cập nhật localStorage khi step thay đổi
+  useEffect(() => {
+    localStorage.setItem("cartStep", step);
+  }, [step]);
+  // Hàm xóa step khỏi localStorage
+  const resetCartStep = () => {
+    localStorage.removeItem("cartStep");
+    setStep("cart");
+  }
+
   const {user} = useAuthStore();
   const [carts, setCarts] = useState<ICart | null>(null);
   const [cartItems, setCartItems] = useState<ICartItem[]>([]);
@@ -113,9 +119,9 @@ export default function CartPage() {
     const updateCartItems = cartItems?.map((item) => {
       if(item._id === itemId) {
         const newQuantity = item.quantity + 1;
-        const newTotalAmount = item.productVariant.salePrice * newQuantity;
+        const newTotalAmount = item.product.salePrice * newQuantity;
         console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-        setTotalAmount(totalAmount + item.productVariant.salePrice);
+        setTotalAmount(totalAmount + item.product.salePrice);
         return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
       }
       return item;
@@ -127,9 +133,9 @@ export default function CartPage() {
     const updateCartItems = cartItems?.map((item) => {
       if(item._id === itemId) {
         const newQuantity = item.quantity > 1 ? item.quantity -1 : 1;
-        const newTotalAmount = item.productVariant.salePrice * newQuantity;
+        const newTotalAmount = item.product.salePrice * newQuantity;
         console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-        setTotalAmount(totalAmount - item.productVariant.salePrice);
+        setTotalAmount(totalAmount - item.product.salePrice);
         return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
       }
       return item;
@@ -167,7 +173,7 @@ export default function CartPage() {
       {/* Mua thêm sản phẩm khác */}
       <div className="w-[800px] h-full">
         <div className="text-blue-500 pr-2 py-4 px-4">
-          <Link href={'/products'}>{`< Mua thêm sản phẩm khác`}</Link>
+          <Link href={'/'}>{`< Mua thêm sản phẩm khác`}</Link>
         </div>
         {/* Navigation cart */}
         
@@ -185,8 +191,7 @@ export default function CartPage() {
               <span className={step === "info" ? "text-red-500 font-bold" : "text-gray-600"}><IdCard /></span>
               <span className={step === "info" ? "text-red-500 font-bold" : "text-gray-600"}>Thông tin đặt hàng</span>
             </div>
-            <div 
-            onClick={() => setStep("payment")}
+            <div
             key="payment"
             className="flex flex-col gap-y-1 justify-center items-center cursor-pointer">
               <span className={step === "payment" ? "text-red-500 font-bold" : "text-gray-600"}><CreditCard /></span>
@@ -248,7 +253,7 @@ export default function CartPage() {
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.4 }}
             >
-              <DoneComponent />
+              <DoneComponent resetCartStep={resetCartStep} />
             </motion.div>
           )}
       </AnimatePresence>

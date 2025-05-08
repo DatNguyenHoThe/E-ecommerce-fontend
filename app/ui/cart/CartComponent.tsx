@@ -55,9 +55,9 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
         const updateCartItems = cartItems?.map((item) => {
           if(item._id === itemId) {
             const newQuantity = item.quantity + 1;
-            const newTotalAmount = item.productVariant.salePrice * newQuantity;
+            const newTotalAmount = item.product.salePrice * newQuantity;
             console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-            setTotalAmount(totalAmount + item.productVariant.salePrice);
+            setTotalAmount(totalAmount + item.product.salePrice);
             return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
           }
           return item;
@@ -69,10 +69,10 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
         const updateCartItems = cartItems?.map((item) => {
           if(item._id === itemId) {
             const newQuantity = item.quantity > 1 ? item.quantity -1 : 1;
-            const newTotalAmount = item.productVariant.salePrice * newQuantity;
+            const newTotalAmount = item.product.salePrice * newQuantity;
             console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
             if(item.quantity > 1) {
-                setTotalAmount(totalAmount - item.productVariant.salePrice);
+                setTotalAmount(totalAmount - item.product.salePrice);
             } else setTotalAmount(totalAmount);
             return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
           }
@@ -108,7 +108,7 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
       //----------------------BEGIN CLICK UPDATE CARD FOLOW CARDITEM-------------------------//
       // Setting lại dữ cart items ---> truyền vào carts
       const cartItemsForUpload = cartItems.map(item => ({
-        productVariant: item.productVariant._id,
+        product: item.product._id,
         quantity: item.quantity,
         currentPrice: item.currentPrice,
         currentSalePrice: item.currentSalePrice,
@@ -148,8 +148,8 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
                   
                   >
                     <Image 
-                    alt={item.productVariant.variantName}
-                    src={item.productVariant.images[0]}
+                    alt={item.product.product_name}
+                    src={item.product.images[0]}
                     width={100}
                     height={100}
                     className="p-2 border border-gray-200"
@@ -164,7 +164,7 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
                   </div>
                   <div className="flex flex-col gap-y-1 p-1">
                     <span className="font-bold">
-                      {item.productVariant.product.product_name}
+                      {item.product.product_name}
                     </span>
                     <span>
                       <p className="text-[14px] font-bold">Khuyến mãi kèm theo</p>
@@ -178,10 +178,10 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
                 </div>
                 <div className="flex flex-col gap-y-1 p-1">
                   <span className='text-red-500 font-bold text-xl flex justify-end'>
-                  {item.productVariant.salePrice && item.productVariant.salePrice.toLocaleString()}₫
+                  {item.product.salePrice && item.product.salePrice.toLocaleString()}₫
                   </span>
                   <span className='line-through text-gray-500 flex justify-end'>
-                  {item.productVariant.price && item.productVariant.price.toLocaleString()}₫
+                  {item.product.price && item.product.price.toLocaleString()}₫
                   </span>
                   <span className="flex mt-2">
                     <p 

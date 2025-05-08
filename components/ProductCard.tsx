@@ -13,6 +13,7 @@ interface ProductCardProps {
     slug: string;
     price: number;
     stock: number;
+    salePrice: number;
     images: string[];
     category: {
       _id: string;
@@ -20,21 +21,20 @@ interface ProductCardProps {
     };
     attributes: (string | { name: string; value: string })[];
     rating: number;
-    Brand: {
+    brand: {
       _id: string;
       brand_name: string;
     };
     reviewCount: number;
     tags: string[];
-    originalPrice?: number;
   };
   category: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
-  const originalPrice = product.originalPrice || product.price * 1.25;
+  const originalPrice = product.price || product.salePrice * 1.25;
   const discountPercent = Math.round(
-    100 - (product.price / originalPrice) * 100
+    100 - (product.salePrice / originalPrice) * 100
   );
 
   // Extract key specs from attributes for spec badges
@@ -74,7 +74,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
   const keySpecs = getKeySpecs();
 
   return (
-    <Link href={`/products/${product._id}`}>
+    <Link href={`/products/${product.slug}`}>
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition duration-200 h-full flex flex-col hover:border-none">
         {/* Product Image */}
         <div className="p-4 flex-grow flex items-center justify-center">
@@ -106,7 +106,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
             ) : (
               // Fallback to showing brand if no specs are available
               <div className="flex items-center gap-1 text-sm text-gray-600">
-                <span>🏷️ {product.Brand?.brand_name || "Brand"}</span>
+                <span>🏷️ {product.brand?.brand_name || "Brand"}</span>
               </div>
             )}
           </div>
@@ -118,7 +118,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-red-600 font-bold text-xl">
-                {product.price.toLocaleString()}đ
+                {product.salePrice.toLocaleString()}đ
               </span>
               <span className="bg-red-600 text-white text-xs px-2 py-0.5 rounded">
                 -{discountPercent}%
@@ -128,11 +128,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
 
           {/* Rating */}
           <div className="flex items-center mt-2 text-sm">
-            <div className="flex text-yellow-400">
+            <div className="flex gap-x-1 items-center">
+              {product.rating.toFixed(1)}
               <Star
                 className={cn(
                   "h-4 w-4",
-                  product.rating > 0 ? "fill-yellow-400" : "fill-gray-300"
+                  product.rating > 0 ? "fill-yellow-400 text-yellow-400" : "fill-gray-300"
                 )}
               />
             </div>

@@ -1,4 +1,4 @@
-import { ICart } from "@/app/types/types";
+import { ICart, IOrder } from "@/app/types/types";
 import { Button } from "@/components/ui/button";
 import { axiosClient } from "@/libs/axiosClient";
 import { env } from "@/libs/env.helper";
@@ -7,31 +7,6 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import React, { useEffect, useState } from "react";
 import { useForm, useFormContext, useWatch } from "react-hook-form";
 
-export interface IShippingAddress {
-  fullName: string;
-  gender: "male" | "female";
-  phone: string;
-  street: string;
-  ward: string;
-  district: string;
-  city: string;
-  country?: string;
-}
-
-export interface IOrder {
-  orderNumber: string;
-  products: object[];
-  totalAmount: number;
-  shippingFee: number;
-  tax: number;
-  discount: number;
-  paymentMethod: string;
-  paymentStatus: string;
-  shippingAddress: IShippingAddress;
-  status: string;
-  notes: string;
-  user: string;
-}
 
 export default function InfoComponent({
   onNext

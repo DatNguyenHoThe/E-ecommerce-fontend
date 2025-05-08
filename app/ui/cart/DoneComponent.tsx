@@ -57,9 +57,11 @@ export interface IOrder {
   user: string;
 }
 
-export default function DoneComponent() {
+export default function DoneComponent({resetCartStep}:{resetCartStep: ()=>void}) {
   const [order, setOrder] = useState<IOrder | null>(null);
   const {user} = useAuthStore();
+
+  
   
 
   //fetch dữ liệu từ orders về
@@ -104,12 +106,12 @@ export default function DoneComponent() {
         </p>
 
         <div className="flex flex-col gap-3">
-          <Link href="/account/orders">
+          <Link href="/account/orders" onClick={resetCartStep}>
             <span className="inline-block w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
               Xem đơn hàng của bạn
             </span>
           </Link>
-          <Link href="/">
+          <Link href="/" onClick={resetCartStep}>
             <span className="inline-block w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition">
               Về trang chủ
             </span>

@@ -1,10 +1,11 @@
-'use client';
+"use client";
+import { useEffect, useState } from "react";
+import type React from "react";
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import ProductCard from '@/components/ProductCard';
-import Link from 'next/link';
+import { useParams } from "next/navigation";
+import ProductCard from "@/components/ProductCard";
 import { Filter, Home } from 'lucide-react';
+import Link from "next/link";
 
 interface Product {
   _id: string;
@@ -12,15 +13,15 @@ interface Product {
   description: string;
   slug: string;
   price: number;
+  salePrice: number;
   stock: number;
   images: string[];
   category: ICategory;
   attributes: string[];
   rating: number;
-  Brand: Brand;
+  brand: Brand;
   reviewCount: number;
   tags: string[];
-  originalPrice?: number;
 }
 
 interface ICategory {
@@ -45,48 +46,55 @@ interface ApiResponse {
 export default function ProductPageByCategoryPage() {
   const params = useParams();
   const slug = params?.slug as string;
-  
+
   const [products, setProducts] = useState<Product[]>([]);
-  const [minPrice, setMinPrice] = useState<string>('');
-  const [maxPrice, setMaxPrice] = useState<string>('');
-  const [selectedBrand, setSelectedBrand] = useState<string>('');
-  const [selectedRating, setSelectedRating] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<string>('');
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [minRating, setMinRating] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<string>("desc");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [noProducts, setNoProducts] = useState<boolean>(false);
-
   const fetchProducts = async () => {
     setIsLoading(true);
     setNoProducts(false);
 
+    const decodedSlug = decodeURIComponent(slug);
+
+    // Ensuring minPrice and maxPrice are numbers
+    const numericMinPrice = minPrice ? Number.parseFloat(minPrice) : null;
+    const numericMaxPrice = maxPrice ? Number.parseFloat(maxPrice) : null;
+
     const queryParams = new URLSearchParams({
-  category_name: Array.isArray(slug) ? slug[0] : slug,  // Kiểm tra nếu slug là mảng, lấy phần tử đầu tiên
-  page: currentPage.toString(),
-  limit: '12',
-  ...(minPrice && { price_gte: minPrice }),
-  ...(maxPrice && { price_lte: maxPrice }),
-  ...(selectedBrand && { product_name: selectedBrand }),
-  ...(selectedRating && { rating: selectedRating }),
-  ...(sortOrder && {
-    sort_by: sortOrder === 'newest' ? 'createdAt' : 'price',
-    sort_type: sortOrder === 'asc' ? 'asc' : sortOrder === 'desc' ? 'desc' : 'desc',
-  }),
-});
+      category_slug: decodedSlug,
+      page: currentPage.toString(),
+      limit: "12",
+      ...(numericMinPrice &&
+        !isNaN(numericMinPrice) && { price_gte: numericMinPrice.toString() }),
+      ...(numericMaxPrice &&
+        !isNaN(numericMaxPrice) && { price_lte: numericMaxPrice.toString() }),
+      ...(selectedBrand && { brand_slug: selectedBrand }),
+      ...(minRating && { rating_gte: minRating }),
+      ...(sortOrder && {
+        sort_by: sortOrder === "newest" ? "createdAt" : "salePrice",
+        sort_type: sortOrder === "asc" ? "asc" : "desc",
+      }),
+    });
 
     const query = `http://localhost:8889/api/v1/products?${queryParams.toString()}`;
-
+    console.log('query===>', query);
     try {
       const res = await fetch(query);
-      if (!res.ok) throw new Error('Failed to fetch products');
+      if (!res.ok) throw new Error("Failed to fetch products");
 
       const data: ApiResponse = await res.json();
       setProducts(data.data.products);
       setTotalPages(Math.ceil(data.data.pagination.totalRecord / 12));
       if (data.data.products.length === 0) setNoProducts(true);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
     } finally {
       setIsLoading(false);
     }
@@ -101,7 +109,7 @@ export default function ProductPageByCategoryPage() {
     minPrice,
     maxPrice,
     selectedBrand,
-    selectedRating,
+    minRating,
     sortOrder,
     currentPage,
   ]);
@@ -111,24 +119,29 @@ export default function ProductPageByCategoryPage() {
       setCurrentPage(newPage);
     }
   };
-
+  //Price
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === '' || parseInt(value) >= 0) {
+    if (
+      value === "" ||
+      (!isNaN(Number.parseInt(value)) && Number.parseInt(value) >= 0)
+    ) {
       setMinPrice(value);
     }
   };
 
   const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === '' || parseInt(value) >= 0) {
+    if (
+      value === "" ||
+      (!isNaN(Number.parseInt(value)) && Number.parseInt(value) >= 0)
+    ) {
       setMaxPrice(value);
     }
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Breadcrumb */}
       <div className="flex items-center space-x-2 text-gray-600 mb-8 text-[15px]">
         <Home className="text-blue-500" />
         <Link href="/" className="hover:underline text-blue-600">
@@ -140,14 +153,13 @@ export default function ProductPageByCategoryPage() {
         </span>
       </div>
 
-      {/* Filter */}
       <div className="mb-8 bg-white p-4 rounded-lg shadow-sm">
         <div className="flex items-center mb-4">
           <Filter className="text-blue-500 mr-2" />
           <h2 className="text-lg font-semibold text-gray-800">Bộ lọc</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Filters for Brand, Rating, Sorting, and Price */}
+          {/* Bộ lọc cho thương hiệu, đánh giá, sắp xếp, và giá */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Thương hiệu
@@ -158,8 +170,21 @@ export default function ProductPageByCategoryPage() {
               onChange={(e) => setSelectedBrand(e.target.value)}
             >
               <option value="">Tất cả</option>
-              <option value="apple">Apple</option>
-              <option value="samsung">Samsung</option>
+              {/* Extract unique brands to avoid duplicates */}
+              {Array.from(
+                new Set(
+                  products.map((product) => JSON.stringify(product.brand))
+                )
+              )
+                .map((brandString) => {
+                  const brand = JSON.parse(brandString);
+                  return brand ? (
+                    <option key={brand._id} value={brand.slug}>
+                      {brand.brand_name}
+                    </option>
+                  ) : null;
+                })
+                .filter(Boolean)}
             </select>
           </div>
           <div>
@@ -168,13 +193,13 @@ export default function ProductPageByCategoryPage() {
             </label>
             <select
               className="w-full border border-gray-300 rounded-md p-2 text-sm"
-              value={selectedRating}
-              onChange={(e) => setSelectedRating(e.target.value)}
+              value={minRating}
+              onChange={(e) => setMinRating(e.target.value)}
             >
               <option value="">Tất cả</option>
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[5, 4, 3, 2, 1].map((star) => (
                 <option key={star} value={star}>
-                  {star} sao
+                  {"⭐".repeat(star)} trở lên
                 </option>
               ))}
             </select>
@@ -192,7 +217,6 @@ export default function ProductPageByCategoryPage() {
               <option value="asc">Giá tăng</option>
               <option value="desc">Giá giảm</option>
               <option value="newest">Mới nhất</option>
-              <option value="bestseller">Bán chạy</option>
             </select>
           </div>
           <div className="sm:col-span-3 grid grid-cols-2 gap-2">
@@ -226,13 +250,16 @@ export default function ProductPageByCategoryPage() {
         </div>
       </div>
 
-      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {isLoading ? (
-          <div className="w-full flex justify-center items-center py-8">Loading...</div>
+          <div className="w-full flex justify-center items-center py-8">
+            Loading...
+          </div>
         ) : noProducts ? (
           <div className="w-full flex justify-center items-center py-8">
-            <span className="text-lg text-gray-600">Không tìm thấy sản phẩm</span>
+            <span className="text-lg text-gray-600">
+              Không tìm thấy sản phẩm
+            </span>
           </div>
         ) : (
           products.map((product) => (
@@ -241,7 +268,6 @@ export default function ProductPageByCategoryPage() {
         )}
       </div>
 
-      {/* Pagination */}
       <div className="flex justify-center space-x-2 mt-8">
         <button
           onClick={() => handlePageChange(currentPage - 1)}

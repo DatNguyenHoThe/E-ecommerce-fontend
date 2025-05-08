@@ -1,22 +1,17 @@
 
-
-export interface IProduct {
+  
+export  interface IProduct {
     _id: string;
     product_name: string;
-  }
-  
-export  interface IProductVariant {
-    _id: string;
-    variantName: string;
+    slug: string;
     price: number;
     salePrice: number;
     images: string[];
-    product: IProduct;
   }
   
 export  interface ICartItem {
     _id: string;
-    productVariant: IProductVariant;
+    product: IProduct;
     quantity: number;
     currentPrice: number;
     currentSalePrice: number;
@@ -29,3 +24,40 @@ export interface ICart {
     totalAmount: number;
     user: string
   }
+
+export interface IShippingAddress {
+  fullName: string;
+  gender: "male" | "female";
+  phone: string;
+  street: string;
+  ward: string;
+  district: string;
+  city: string;
+  country?: string;
+}
+
+export interface IOrderItem {
+  _id: string,
+  product: IProduct,
+  quantity: number,
+  currentPrice: number,
+  currentSalePrice: number,
+  totalAmount: number
+}
+
+export interface IOrder {
+  _id: string,
+  orderNumber: string;
+  products: IOrderItem[];
+  totalAmount: number;
+  shippingFee: number;
+  tax: number;
+  discount: number;
+  paymentMethod: string;
+  paymentStatus: string;
+  shippingAddress: IShippingAddress;
+  createdAt: Date;
+  status: string;
+  notes: string;
+  user: string;
+}

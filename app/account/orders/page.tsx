@@ -1,81 +1,12 @@
 'use client'
 
+import { IOrder } from '@/app/types/types';
 import { axiosClient } from '@/libs/axiosClient';
 import { env } from '@/libs/env.helper';
 import { useAuthStore } from '@/stores/useAuthStore';
 import Link from 'next/link'
 import { useEffect, useState } from 'react';
 
-interface IProduct {
-  _id: string;
-  product_name: string;
-}
-
-interface IProductVariant {
-  _id: string;
-  variantName: string;
-  price: number;
-  salePrice: number;
-  images: string[];
-  product: IProduct;
-}
-
-export interface IShippingAddress {
-  fullName: string;
-  gender: "male" | "female";
-  phone: string;
-  street: string;
-  ward: string;
-  district: string;
-  city: string;
-  country?: string;
-}
-
-interface IOrderItem {
-  _id: string,
-  productVariant: IProductVariant,
-  quantity: number,
-  currentPrice: number,
-  currentSalePrice: number,
-  totalAmount: number
-}
-
-export interface IOrder {
-  _id: string,
-  orderNumber: string;
-  products: IOrderItem[];
-  totalAmount: number;
-  shippingFee: number;
-  tax: number;
-  discount: number;
-  paymentMethod: string;
-  paymentStatus: string;
-  shippingAddress: IShippingAddress;
-  status: string;
-  notes: string;
-  user: string;
-}
-
-const mockOrders = [
-  {
-    id: 'DH123456789',
-    date: '06/05/2025',
-    status: 'shipping',
-    total: 2990000
-  },
-  {
-    id: 'DH123456788',
-    date: '04/05/2025',
-    status: 'processing',
-    total: 1590000
-  },
-  {
-    id: 'DH123456787',
-    date: '01/05/2025',
-    status: 'delivered',
-    total: 4490000
-  }
-]
 
 const statusColorMap: Record<string, string> = {
   received: 'text-gray-500',
@@ -133,7 +64,7 @@ export default function OrdersPage() {
         <div className="space-y-4">
           {orders !== null && orders.map((order) => (
             <Link
-              href={`/orders/${order._id}`}
+              href={`/account/orders/${order._id}`}
               key={order._id}
               className="block border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
             >

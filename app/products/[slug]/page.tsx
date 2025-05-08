@@ -1,7 +1,10 @@
+
 import { Home, Star } from "lucide-react";
 import Link from "next/link";
 import ProductGallery from "../../../components/SwiperClientComponent";
 import ProductCard from "@/components/ProductCard";
+import { useAuthStore } from "@/stores/useAuthStore";
+import BuyButton from "@/app/ui/buton/BuyButton";
 
 interface Product {
   _id: string;
@@ -9,6 +12,7 @@ interface Product {
   description: string;
   slug: string;
   price: number;
+  salePrice: number;
   stock: number;
   images: string[];
   category: ICategory;
@@ -16,13 +20,13 @@ interface Product {
   rating: number;
   Brand: Brand;
   reviewCount: number;
-  tags: string[];
-  originalPrice?: number;
+  tags: string[]
 }
 
 interface ICategory {
   _id: string;
   category_name: string;
+  slug: string;
 }
 
 interface Brand {
@@ -41,6 +45,7 @@ export default async function ProductDetailPage({
 }) {
   // Fetch product
   const {slug} = await params;
+
   console.log('slug===>', slug);
   const res = await fetch(
     `http://localhost:8889/api/v1/products/${slug}`,
@@ -59,6 +64,7 @@ export default async function ProductDetailPage({
 
   // Fetch actual category name
   let categoryName = "Danh mục";
+  let categorySlug = "danh-muc";
   console.log("category", product.category);
   try {
     const categoryRes = await fetch(
@@ -68,6 +74,7 @@ export default async function ProductDetailPage({
     if (categoryRes.ok) {
       const categoryData = await categoryRes.json();
       categoryName = categoryData.data?.category_name || categoryName;
+      categorySlug = categoryData.data?.slug || categorySlug;
     }
   } catch (error) {
     console.error("Lỗi khi lấy category:", error);
@@ -77,7 +84,7 @@ export default async function ProductDetailPage({
   let similarProducts: Product[] = [];
   try {
     const similarRes = await fetch(
-      `http://localhost:8889/api/v1/products?category_name=${categoryName}&limit=5`,
+      `http://localhost:8889/api/v1/products?category_slug=${categorySlug}&limit=5`,
       { cache: "no-store" }
     );
     if (similarRes.ok) {
@@ -90,9 +97,9 @@ export default async function ProductDetailPage({
     console.error("Lỗi khi lấy sản phẩm tương tự:", error);
   }
 
-  const originalPrice = product.originalPrice || product.price * 1.25;
+  const originalPrice = product.price || product.salePrice * 1.25;
   const discountPercent = Math.round(
-    100 - (product.price / originalPrice) * 100
+    100 - (product.salePrice / originalPrice) * 100
   );
 
   return (
@@ -105,7 +112,7 @@ export default async function ProductDetailPage({
         </Link>
         <span>/</span>
         <Link
-          href={`/collections/${categoryName}`}
+          href={`/collections/${categorySlug}`}
           className="hover:underline text-blue-600"
         >
           {categoryName}
@@ -140,7 +147,7 @@ export default async function ProductDetailPage({
               {formatPrice(originalPrice)}
             </span>
             <span className="text-red-600 font-bold text-xl">
-              {formatPrice(product.price)}
+              {formatPrice(product.salePrice)}
             </span>
             {discountPercent > 0 && (
               <span className="text-xs text-white bg-red-500 px-2 py-0.5 rounded">
@@ -148,15 +155,9 @@ export default async function ProductDetailPage({
               </span>
             )}
           </div>
-
-          <div className="mt-8">
-            <button className="w-[300px] py-2 bg-red-600 text-white font-semibold rounded-[3px]">
-              <h1 className="text-[15px]">MUA NGAY</h1>
-              <h2 className="text-[10px]">
-                Giao tận nơi hoặc nhận tại cửa hàng
-              </h2>
-            </button>
-          </div>
+          
+          {/* Buy Button - Client Component */}
+          <BuyButton productId={product._id} price={product.price} salePrice={product.salePrice} />
 
           <div className="bg-gray-100 rounded-md text-sm p-4 mb-6 mt-8">
             <h3 className="font-semibold mb-2">Đặc điểm nổi bật</h3>
