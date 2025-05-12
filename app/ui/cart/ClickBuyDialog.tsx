@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface ClickBuyDialogProps {
     open: boolean;
@@ -23,10 +23,11 @@ export default function ClickBuyDialog({
   setOpen,
   onAddToCart,
 }: ClickBuyDialogProps) {
+  const router = useRouter();
 
   const handleConfirm = () => {
     onAddToCart();
-    setOpen(false);
+    router.push(`/login`);
   };
 
   return (

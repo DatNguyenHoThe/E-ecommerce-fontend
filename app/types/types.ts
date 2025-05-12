@@ -26,14 +26,17 @@ export interface ICart {
   }
 
 export interface IShippingAddress {
-  fullName: string;
-  gender: "male" | "female";
-  phone: string;
   street: string;
   ward: string;
   district: string;
   city: string;
   country?: string;
+}
+
+export interface IShippingInfor {
+  recipientName: string;
+  gender: "male" | "female";
+  phone: string
 }
 
 export interface IOrderItem {
@@ -56,6 +59,7 @@ export interface IOrder {
   paymentMethod: string;
   paymentStatus: string;
   shippingAddress: IShippingAddress;
+  shippingInfor: IShippingInfor;
   createdAt: Date;
   status: string;
   notes: string;

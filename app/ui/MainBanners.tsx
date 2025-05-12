@@ -1,7 +1,8 @@
 "use client"
 
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function MainBanners() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,17 +47,38 @@ export default function MainBanners() {
             name: 'banner_homepage_acer_rtx_5000',
             imgUrl: 'http://localhost:8889/uploads/banners/banner_homepage_acer_rtx_5000.webp',
         },
-    ]
+    ];
+
+    // Tự động chuyển banner sau mỗi 8 giây
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+        }, 8000);
+
+        return () => clearInterval(intervalId); // Dọn dẹp interval khi component unmount
+    }, [banners.length]);
 
   return (
     <div className='relative w-[651px] h-[326px] flex justify-center'>
-        <Image 
-        alt={banners[currentIndex].name}
-        src={banners[currentIndex].imgUrl}
-        width={651}
-        height={326}
-        className='rounded-sm'
-        />
+        <AnimatePresence mode="wait">
+           <motion.div
+                key={banners[currentIndex].name}
+                initial={{ opacity: 0, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0.5, x: 0 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute w-full h-full"
+            >
+              <Image 
+                alt={banners[currentIndex].name}
+                src={banners[currentIndex].imgUrl}
+                width={651}
+                height={326}
+                className='rounded-sm'
+              />       
+            </motion.div>
+        </AnimatePresence>   
+        
         <div className="absolute bottom-6 flex gap-x-2">
             {banners.slice(0).map((_, index) => (
             <div

@@ -100,13 +100,16 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
         const response = await deleteItem(itemId);
         if(response && user?._id) {
           const updated = await fetchCarts(user?._id);
-          if(updated) setCartItems(updated)
+          if(updated) {
+            setCartItems(updated.items);
+            setCarts(updated);
+          } 
         }
       }
       //----------------------END CART ITEMS-----------------------------//
 
       //----------------------BEGIN CLICK UPDATE CARD FOLOW CARDITEM-------------------------//
-      // Setting lại dữ cart items ---> truyền vào carts
+      // Setting lại dữ liệu cart items ---> truyền vào carts
       const cartItemsForUpload = cartItems.map(item => ({
         product: item.product._id,
         quantity: item.quantity,

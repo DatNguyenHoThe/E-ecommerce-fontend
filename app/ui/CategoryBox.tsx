@@ -44,7 +44,7 @@ const CategoryItem = ({category}: {category: TCategory}) => {
 
 export default function CategoryBox() {
     const [categories, setCategories] = useState<TCategory[]>([]);
-    console.log('API===>', `${env.API_URL}/categories/root`);
+    //console.log('API===>', `${env.API_URL}/categories/root`);
 
     useEffect(() => {
         const getCategories = async() => {

@@ -1,11 +1,62 @@
+"use client"
+
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MenuHeader from './MenuHeader'
 import IconHeader from './IconHeader'
 import Link from 'next/link'
 import UserInfo from './user/UserInfo'
+import { useRef } from "react";
+import { useRouter } from 'next/navigation'
+import { buildSlug } from '@/libs/slugify.helper'
+import { axiosClient } from '@/libs/axiosClient'
+import { env } from '@/libs/env.helper'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { ICart } from '../types/types'
 
 export default function Header() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const {user} = useAuthStore();
+  const [carts, setCarts] = useState<ICart | null>(null);
+  const [itemQty, setItemQty] = useState(0);
+
+  //handle lấy value từ input và chuyển hướng
+  const handleSearch = () => {
+    const value = inputRef.current?.value.trim();
+    console.log('value===>', value);
+    if(value) {
+      router.push(`/products?search=${buildSlug(value)}`);
+    }
+  };
+
+  //----------------------BEGIN GET ALL CART-------------------------//
+      const fetchCarts = async(userId: string) => {
+        try {
+          const response = await axiosClient.get(`${env.API_URL}/carts/user/${userId}`);
+          if(response.status === 200) {
+            return response?.data?.data;
+          }
+        } catch (error) {
+          console.error('fetching carts is failed', error);
+        }
+      }
+      useEffect(() => {
+        if(user?._id === undefined) return;
+        const getCarts = async(userId: string) => {
+          const data = await fetchCarts(userId);
+          //đếm số lượng hàng trong giỏ và set item quantity
+          const itemCount = data?.items.reduce((total: number, item: any) => total + item.quantity, 0);
+          setItemQty(itemCount);
+          if(data) {
+            setCarts(data);
+          } 
+        }
+        getCarts(user?._id);
+      },[user?._id]);
+    //----------------------END GET ALL CART-------------------------//
+    
+
   return (
     <>
     <div className='flex items-center justify-center w-full bg-[#1982F9]'>
@@ -30,12 +81,16 @@ export default function Header() {
         <MenuHeader />
         <div className="flex items-center bg-white border border-gray-300 rounded-sm px-4 py-2 w-[365px] max-w-md shadow-sm">
           <input
+            ref={inputRef}
             type="text"
             placeholder="Bạn cần tìm gì?"
             className="w-full outline-none bg-transparent placeholder-gray-600 text-gray-800"
           />
-          <i className="bi bi-search text-gray-600"></i>
-      </div>
+          <i 
+          onClick={handleSearch}
+          className="bi bi-search text-gray-600 cursor-pointer">
+          </i>
+        </div>
       <div className='flex gap-x-4 p-1'>
         <IconHeader 
         icon = {<i className="bi bi-headset"></i>}
@@ -45,7 +100,7 @@ export default function Header() {
         <IconHeader 
         icon = {<i className="bi bi-geo-alt"></i>}
         title= {<>Hệ thống<br />Showroom</>}
-        url='/pages/he-thong-showroom-gearvn'
+        url='/pages/he-thong-cua-hang'
         />
         <IconHeader 
         icon = {
@@ -60,7 +115,16 @@ export default function Header() {
         url='/account/orders'
         />
         <IconHeader 
-        icon = {<i className="bi bi-cart3"></i>}
+        icon = {
+        <div className="flex relative">
+          <i className="bi bi-cart3"></i>
+          {itemQty !== 0 && (
+            <span className='rounded-full w-4 h-4 bg-yellow-500 text-black text-[10px] border-2 border-white absolute top-0 -end-1 flex justify-center items-center'>
+              {itemQty}
+            </span>
+          )}
+        </div>
+      }
         title = {<>Giỏ<br />hàng</>}
         url = '/cart'
         />

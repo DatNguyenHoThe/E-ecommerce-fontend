@@ -38,9 +38,14 @@ interface ICart {
 }
 
 export default function CartPage() {
-  const [step, setStep] = useState<"cart" | "info" | "payment" | "done">(
-    () => localStorage.getItem("cartStep") as "cart" | "info" | "payment" | "done" || "cart"
-  ); // lưu vào localstorage để khi f5 thì vẩn ở bước hiện tại của giỏ hàng
+  const [step, setStep] = useState<"cart" | "info" | "payment" | "done">("cart"); 
+  // lưu vào localstorage để khi f5 thì vẩn ở bước hiện tại của giỏ hàng
+  // Lấy giá trị từ localStorage sau khi mount
+  useEffect(() => {
+    const savedStep = localStorage.getItem("cartStep") as "cart" | "info" | "payment" | "done";
+    if (savedStep) setStep(savedStep);
+}, []);
+
   // Cập nhật localStorage khi step thay đổi
   useEffect(() => {
     localStorage.setItem("cartStep", step);

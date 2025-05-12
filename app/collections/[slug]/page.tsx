@@ -263,7 +263,7 @@ export default function ProductPageByCategoryPage() {
           </div>
         ) : (
           products.map((product) => (
-            <ProductCard key={product._id} product={product} category={slug} />
+            <ProductCard key={product._id} product={product} />
           ))
         )}
       </div>

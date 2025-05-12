@@ -25,7 +25,6 @@ export default function Footer() {
             <p className='hover:text-red-500'><Link href='/pages/huong-dan-mua-hang'>Hướng dẫn mua hàng</Link></p>
             <p className='hover:text-red-500'><Link href='/pages/huong-dan-thanh-toan'>Hướng dẫn thanh toán</Link></p>
             <p className='hover:text-red-500'><Link href='/pages/huong-dan-tra-gop'>Hướng dẫn trả góp</Link></p>
-            <p className='hover:text-red-500'><Link href='/pages/tra-cuu-dia-chi-bao-hanh'>Tra cứu địa chỉ bảo hành</Link></p>
           </div>
           <div className='col-span-3 grid grid-rows-6 items-center'>
             <h1 className='hover:text-red-500 cursor-pointer'><strong>TỔNG ĐÀI HỖ TRỢ</strong> <span>(8:00 - 21:00)</span></h1>

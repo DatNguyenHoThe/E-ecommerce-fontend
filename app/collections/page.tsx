@@ -11,15 +11,15 @@ interface Product {
   description: string;
   slug: string;
   price: number;
+  salePrice: number;
   stock: number;
   images: string[];
   category: ICategory;
   attributes: string[];
   rating: number;
-  Brand: Brand;
+  brand: Brand;
   reviewCount: number;
   tags: string[];
-  originalPrice?: number;
 }
 
 interface ICategory {
@@ -243,7 +243,7 @@ export default async function ProductPageByCategoryPage({
           </div>
         ) : (
           products.map((product) => (
-            <ProductCard key={product._id} product={product} category={slug} />
+            <ProductCard key={product._id} product={product} />
           ))
         )}
       </div>

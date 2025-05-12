@@ -5,7 +5,7 @@ import { env } from "@/libs/env.helper";
 import { generateOrderNumber } from "@/libs/generateOrderNumber.helper";
 import { useAuthStore } from "@/stores/useAuthStore";
 import React, { useEffect, useState } from "react";
-import { useForm, useFormContext, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 
 export default function InfoComponent({
@@ -45,7 +45,7 @@ export default function InfoComponent({
     if(user?._id === undefined) return;
     const getCarts = async(userId: string) => {
       const data = await fetchCarts(userId);
-      console.log('carts===>', JSON.stringify(data, null, 2));
+      //console.log('carts===>', JSON.stringify(data, null, 2));
       if(data) {
         console.log('carts items:', data.items); // Kiểm tra items
         setCarts(data);
@@ -102,7 +102,7 @@ export default function InfoComponent({
                   <input
                     type="radio"
                     value="male"
-                    {...register("shippingAddress.gender")}
+                    {...register("shippingInfor.gender")}
                     className="accent-blue-600"
                   />
                   Anh
@@ -111,7 +111,7 @@ export default function InfoComponent({
                   <input
                     type="radio"
                     value="female"
-                    {...register("shippingAddress.gender")}
+                    {...register("shippingInfor.gender")}
                     className="accent-blue-600"
                   />
                   Chị
@@ -123,12 +123,12 @@ export default function InfoComponent({
                   <input
                     id="fullName"
                     placeholder="Nhập họ và tên"
-                    {...register("shippingAddress.fullName")}
+                    {...register("shippingInfor.recipientName")}
                     className="input border border-gray-700 px-4 py-2"
                   />
-                  {errors.shippingAddress?.fullName && (
+                  {errors.shippingInfor?.recipientName && (
                     <span className="text-red-500 text-[12px]">
-                      {errors.shippingAddress?.fullName.message}
+                      {errors.shippingInfor?.recipientName.message}
                     </span>
                   )}
                 </div>
@@ -136,12 +136,12 @@ export default function InfoComponent({
                   <input
                     id="phone"
                     placeholder="Nhập số điện thoại"
-                    {...register("shippingAddress.phone")}
+                    {...register("shippingInfor.phone")}
                     className="input border border-gray-700 px-4 py-2"
                   />
-                  {errors.shippingAddress?.phone && (
+                  {errors.shippingInfor?.phone && (
                     <span className="text-red-500 text-[12px]">
-                      {errors.shippingAddress?.phone.message}
+                      {errors.shippingInfor?.phone.message}
                     </span>
                   )}
                 </div>

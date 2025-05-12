@@ -51,8 +51,8 @@ export default function OrderDetailPage() {
         </CardHeader>
         <CardContent>
           <h3 className="font-semibold text-lg mb-2">Thông tin người nhận</h3>
-          <p>Tên: {user?.fullName}</p>
-          <p>Số điện thoại: {user?.phone}</p>
+          <p>Tên: {order.shippingInfor.recipientName ?? user?.fullName}</p>
+          <p>Số điện thoại: {order.shippingInfor.phone ?? user?.phone}</p>
           <p>Địa chỉ: {order.shippingAddress.street}, {order.shippingAddress.ward}, {order.shippingAddress.district}, {order.shippingAddress.city}, {order.shippingAddress.country}</p>
           <Separator className="my-4" />
           <h3 className="font-semibold text-lg mb-2">Danh sách sản phẩm</h3>
@@ -75,7 +75,7 @@ export default function OrderDetailPage() {
                 <p>Số lượng: {p.quantity}</p>
                 <p>Giá: {p.product.salePrice.toLocaleString()} đ</p>
                 <p>Tổng cộng: {p.totalAmount.toLocaleString()} đ</p>
-</div>
+              </div>
             </div>
           ))}
           <Separator className="my-4" />

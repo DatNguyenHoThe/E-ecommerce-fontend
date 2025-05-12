@@ -18,7 +18,7 @@ interface Product {
   category: ICategory;
   attributes: (string | { name: string; value: string; time?: string })[];
   rating: number;
-  Brand: Brand;
+  brand: IBrand;
   reviewCount: number;
   tags: string[]
 }
@@ -29,9 +29,10 @@ interface ICategory {
   slug: string;
 }
 
-interface Brand {
+interface IBrand {
   _id: string;
   brand_name: string;
+  slug: string;
 }
 
 function formatPrice(price: number): string {
@@ -209,7 +210,6 @@ export default async function ProductDetailPage({
               <ProductCard
                 key={similarProduct._id}
                 product={similarProduct}
-                category={categoryName}
               />
             ))}
           </div>

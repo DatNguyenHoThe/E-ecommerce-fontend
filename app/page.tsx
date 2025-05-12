@@ -6,6 +6,7 @@ import CategoryBox from "./ui/CategoryBox";
 import ProductBox from "./ui/ProductBox";
 import FlashSaleBox from "./ui/FlashSaleBox";
 import TechBoxSmall from "./ui/techNew/TechBoxSmall";
+import BestSaleBox from "./ui/BestSaleBox";
 
 
 
@@ -21,22 +22,22 @@ export default function Home() {
     {
       name: 'thang_04_layout_web__02',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__02.webp',
-      link: '/products/ban-phim'
+      link: '/collections/ban-phim'
     },
     {
       name: 'thang_04_layout_web__03',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__03.webp',
-      link: '/products/pc-gvn-intel-i5-4060'
+      link: '/products/pc-gvn-intel-i5-12400f-vga-rtx-4060'
     },
     {
       name: 'thang_04_layout_web__04',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__04.webp',
-      link: '/products/lap-top-gaming'
+      link: '/collections/laptop'
     },
     {
       name: 'thang_04_layout_web__05',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__05.webp',
-      link: '/products/lap-top-van-phong'
+      link: '/collections/laptop'
     },
     {
       name: 'thang_04_banner_ver_2024_500x250',
@@ -46,17 +47,17 @@ export default function Home() {
     {
       name: 'thang_04_layout_web__06',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__06.webp',
-      link: '/products/man-hinh'
+      link: '/products/pc-gvn-intel-i3-12100f-vga-rx-6500xt'
     },
     {
       name: 'thang_04_layout_web__07',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__07.webp',
-      link: '/products/chuot'
+      link: '/collections/chuot'
     },
     {
       name: 'thang_04_layout_web__08',
       imgUri: 'http://localhost:8889/uploads/services/thang_04_layout_web__08.webp',
-      link: '/products/pc-gvn-intel-i5-rx6600'
+      link: '/collections/man-hinh'
     },
   ];
 
@@ -103,10 +104,7 @@ export default function Home() {
           <FlashSaleBox />
         </div>
         <div>
-          <ProductBox 
-          title="Sản phẩm bán chạy"
-          type="bestsale"
-          />
+          <BestSaleBox />
         </div>
         <div>
           <ProductBox 

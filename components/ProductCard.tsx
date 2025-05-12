@@ -28,10 +28,9 @@ interface ProductCardProps {
     reviewCount: number;
     tags: string[];
   };
-  category: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const originalPrice = product.price || product.salePrice * 1.25;
   const discountPercent = Math.round(
     100 - (product.salePrice / originalPrice) * 100
