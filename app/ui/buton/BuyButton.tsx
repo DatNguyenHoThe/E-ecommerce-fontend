@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { axiosClient } from "@/libs/axiosClient";
 import { env } from "@/libs/env.helper";
 import { ICart } from "@/app/types/types";
+import { useCartStore } from "@/stores/useCartStore";
 
 interface BuyButtonProps {
   productId: string;
@@ -20,61 +21,15 @@ export default function BuyButton({
 }: BuyButtonProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const { user } = useAuthStore();
-  const [carts, setCarts] = useState<ICart | null>(null);
+  const {carts, fetchCart, addToCart} = useCartStore();
 
 
-  //----------------------BEGIN GET ALL CART-------------------------//
-  const fetchCarts = async (userId: string) => {
-    try {
-      const response = await axiosClient.get(
-        `${env.API_URL}/carts/user/${userId}`
-      );
-      if (response.status === 200) {
-        return response?.data?.data;
-      }
-    } catch (error) {
-      console.error("fetching carts is failed", error);
-    }
-  };
+  //Fetch carts khi mà carts hoặc user thay đổi
   useEffect(() => {
-    if (user?._id === undefined) return;
-    const getCarts = async (userId: string) => {
-      const data = await fetchCarts(userId);
-      if (data) {
-        setCarts(data);
-      }
-    };
-    getCarts(user?._id);
-  }, [user?._id]);
-  //----------------------END GET ALL CART-------------------------//
-
-  //REFRESH CART
-  const refreshCarts = async () => {
-    if (!user?._id) return;
-    const data = await fetchCarts(user._id);
-    if (data) setCarts(data);
-  };
-  //AddToCart
-  const addToCart = async () => {
-    try {
-      const response = await axiosClient.post(
-        `${env.API_URL}/carts/user/${user?._id}`,
-        {
-          product: productId,
-          quantity: 1,
-          currentPrice: price,
-          currentSalePrice: salePrice,
-          totalAmount: salePrice,
-        }
-      );
-      if (response.status === 201) {
-        alert("Bạn đã thêm vào giỏ hàng thành công");
-        await refreshCarts();
-      }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
+    if(user?._id) {
+      fetchCart(user._id);
     }
-  };
+  },[user?._id, fetchCart])
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -87,10 +42,13 @@ export default function BuyButton({
           "Sản phẩm này đã có trong giỏ hàng, bạn có thể kiểm tra giỏ hàng để biết thêm chi tiết"
         );
       } else {
-        //Không thì sẽ thêm productId vào mảng và thêm sản phẩm vào giỏ hàng
-        addToCart();
+        //Không thì sẽ thêm sản phẩm vào giỏ hàng
+        const success = await addToCart(user._id, productId, price, salePrice)
+        if(success) {
+          alert("Bạn đã thêm vào giỏ hàng thành công")
+        }
       }
-    }
+    };
   };
 
   return (

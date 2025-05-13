@@ -93,21 +93,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           {/* Spec Badges */}
           <div className="bg-gray-100 rounded-md p-2 mb-4 flex flex-wrap gap-2">
-            {Object.keys(keySpecs).length > 0 ? (
-              Object.entries(keySpecs).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="flex items-center gap-1 text-sm text-gray-600"
-                >
-                  <span>{value}</span>
-                </div>
-              ))
-            ) : (
-              // Fallback to showing brand if no specs are available
-              <div className="flex items-center gap-1 text-sm text-gray-600">
-                <span>🏷️ {product.brand?.brand_name || "Brand"}</span>
-              </div>
-            )}
+            {product.tags.map((tag) => (
+              <span
+                key={tag}
+                className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+            {/* Key Specs */}
           </div>
 
           {/* Pricing */}
@@ -116,7 +110,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {originalPrice.toLocaleString()}đ
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-red-600 font-bold text-xl">
+              <span className="text-red-600 font-bold text-1xl">
                 {product.salePrice.toLocaleString()}đ
               </span>
               <span className="bg-red-600 text-white text-xs px-2 py-0.5 rounded">
@@ -124,20 +118,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               </span>
             </div>
           </div>
-
           {/* Rating */}
-          <div className="flex items-center mt-2 text-sm">
-            <div className="flex gap-x-1 items-center">
-              {product.rating.toFixed(1)}
-              <Star
-                className={cn(
-                  "h-4 w-4",
-                  product.rating > 0 ? "fill-yellow-400 text-yellow-400" : "fill-gray-300"
-                )}
-              />
-            </div>
-            <span className="text-gray-500 ml-1">
-              ({product.reviewCount} đánh giá)
+          <div className="flex items-center mt-2 text-sm text-gray-600">
+            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            <span className="ml-1">
+              {product.rating.toFixed(1)} ({product.reviewCount} đánh giá)
             </span>
           </div>
         </div>

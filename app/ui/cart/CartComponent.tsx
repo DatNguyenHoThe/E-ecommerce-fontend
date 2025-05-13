@@ -7,78 +7,52 @@ import Image from "next/image";
 import { axiosClient } from "@/libs/axiosClient";
 import { env } from "@/libs/env.helper";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useCartStore } from "@/stores/useCartStore";
 import { ICart, ICartItem } from "@/app/types/types";
 
 
 
 export default function CartComponent({ onNext }: { onNext: () => void }) {
-      const {user} = useAuthStore();
-      const [carts, setCarts] = useState<ICart | null>(null);
-      const [cartItems, setCartItems] = useState<ICartItem[]>([]);
-      const [totalAmount, setTotalAmount] = useState<number>(0);
-      console.log('cartItems===>', cartItems);
+  const {user} = useAuthStore();
+  const {carts, fetchCart, itemQty} = useCartStore();
     
     
-      //----------------------BEGIN GET ALL CART-------------------------//
-      const fetchCarts = async(userId: string) => {
-        try {
-          const response = await axiosClient.get(`${env.API_URL}/carts/user/${userId}`);
-          if(response.status === 200) {
-            return response?.data?.data;
-          }
-        } catch (error) {
-          console.error('fetching carts is failed', error);
+  //fetch carts về khi carts hoặc user thay đổi
+  useEffect(() => {
+    if (user?._id) {
+      fetchCart(user._id);
+    }
+  }, [user?._id, fetchCart]);
+
+  //Hàm tăng sản phẩm
+    const handleIncreaseQty = async(itemId: string) => {
+      if(!user?._id || !carts) return;
+      const updateCartItems = carts.items.map((item) => {
+        if(item._id === itemId) {
+          const newQuantity = item.quantity + 1;
+          const newTotalAmount = item.product.salePrice * newQuantity;
+          console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
+          return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
         }
-      }
-      useEffect(() => {
-        if(user?._id === undefined) return;
-        const getCarts = async(userId: string) => {
-          const data = await fetchCarts(userId);
-          if(data) {
-            setCarts(data);
-          } 
-          
-        }
-        getCarts(user?._id);
-      },[user?._id]);
-    //----------------------END GET ALL CART-------------------------//
-    
-      //----------------------BEGIN CART ITEMS-----------------------------//
-      useEffect(() => {
-        if (carts?.items) {
-          setCartItems(carts.items);
-          setTotalAmount(carts.totalAmount);
-        }
-      }, [carts]);
-      //Hàm tăng sản phẩm
-      const handleIncreaseQty = (itemId: string) => {
-        const updateCartItems = cartItems?.map((item) => {
-          if(item._id === itemId) {
-            const newQuantity = item.quantity + 1;
-            const newTotalAmount = item.product.salePrice * newQuantity;
-            console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-            setTotalAmount(totalAmount + item.product.salePrice);
-            return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
-          }
-          return item;
+        return item;
       });
-      setCartItems(updateCartItems);
+      const totalAmount = updateCartItems.reduce((sum,item)=> sum + item.totalAmount, 0);
+      await updateCart(updateCartItems, totalAmount);
       }
       //Hàm giảm sản phẩm
-      const handleDecreaseQty = (itemId: string) => {
-        const updateCartItems = cartItems?.map((item) => {
+      const handleDecreaseQty = async(itemId: string) => {
+        if(!user?._id || !carts) return;
+        const updateCartItems = carts.items.map((item) => {
           if(item._id === itemId) {
             const newQuantity = item.quantity > 1 ? item.quantity -1 : 1;
             const newTotalAmount = item.product.salePrice * newQuantity;
             console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-            if(item.quantity > 1) {
-                setTotalAmount(totalAmount - item.product.salePrice);
-            } else setTotalAmount(totalAmount);
             return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
           }
           return item;
       });
-      setCartItems(updateCartItems);
+      const totalAmount = updateCartItems.reduce((sum,item)=> sum + item.totalAmount, 0);
+      await updateCart(updateCartItems, totalAmount);
       }
       //Xóa sản phẩm
       //Gọi API delete item
@@ -99,39 +73,51 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
       const handleDelete = async(itemId: string) => {
         const response = await deleteItem(itemId);
         if(response && user?._id) {
-          const updated = await fetchCarts(user?._id);
-          if(updated) {
-            setCartItems(updated.items);
-            setCarts(updated);
-          } 
+          //refresh carts
+          fetchCart(user._id);
         }
       }
       //----------------------END CART ITEMS-----------------------------//
 
-      //----------------------BEGIN CLICK UPDATE CARD FOLOW CARDITEM-------------------------//
-      // Setting lại dữ liệu cart items ---> truyền vào carts
-      const cartItemsForUpload = cartItems.map(item => ({
-        product: item.product._id,
-        quantity: item.quantity,
-        currentPrice: item.currentPrice,
-        currentSalePrice: item.currentSalePrice,
-        totalAmount: item.totalAmount,
-      }));
-      const updateCart = async(): Promise<ICart | undefined> => {
+      //----------------------BEGIN UPDATE CARD FOLOW CARDITEM-------------------------//
+      const updateCart = async(items: ICartItem[], totalAmount: number): Promise<ICart | undefined> => {
+        if(!user?._id) return;
+        // Setting lại dữ liệu cart items ---> truyền vào carts
+        const cartItemsForUpload = items.map(item => ({
+          product: item.product._id,
+          quantity: item.quantity,
+          currentPrice: item.currentPrice,
+          currentSalePrice: item.currentSalePrice,
+          totalAmount: item.totalAmount,
+        }));
+        //update cart
         const response = await axiosClient.put(`${env.API_URL}/carts/user/${user?._id}`, {
             items: cartItemsForUpload,
             totalAmount: totalAmount
         })
         if(response.status === 200) {
-          alert('Thêm vào giỏ hàng thành công');
-          onNext();
+          console.log('update carts is successful');
+          //refresh carts
+          fetchCart(user._id);
           return response.data;
         } else {
-          alert('Thêm vào giỏ hàng thất bại');
+          console.log('update carts is failed');
         }
       }
     
-      //----------------------END CLICK UPDATE CARD FOLOW CARDITEM-------------------------//
+      //----------------------END UPDATE CARD FOLOW CARDITEM-------------------------//
+
+      //Gọi handleCheckout
+      const handleCheckout = async() => {
+        if(!user?._id || !carts) return;
+        if(carts && carts.items.length > 0) {
+          alert("Đăng ký thông tin để nhận hàng");
+          onNext();
+        } else {
+          alert("Mua hàng thất bại, mời bạn kiểm tra lại giỏ hàng");
+        }
+        
+      }
 
   return (
     <div className="w-[800px] h-full">
@@ -140,8 +126,8 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
           <div className="flex flex-col w-full h-full justify-center items-center p-6 gap-y-1">
             {/* Danh sách sản phẩm */}
             <div className="border-b border-gray-300 w-full flex flex-col gap-y-6 pb-6">
-            {cartItems && Array.isArray(cartItems) && cartItems.length > 0 ? (
-              cartItems.map((item, index) => (
+            {carts && carts.items && carts.items.length > 0 ? (
+              carts.items.map((item, index) => (
               <div 
               key={index} 
               className="w-full flex justify-between">
@@ -216,11 +202,11 @@ export default function CartComponent({ onNext }: { onNext: () => void }) {
             {/* Tính tổng tiền */}
             <div className="w-full flex justify-between py-6">
               <p className="font-bold text-xl">Tổng tiền</p>
-              <p className="text-red-500 font-bold text-2xl flex">{totalAmount.toLocaleString()}₫</p>
+              <p className="text-red-500 font-bold text-2xl flex">{carts ? carts.totalAmount.toLocaleString() : 0}₫</p>
             </div>
             {/* Button Đặt hàng ngay */}
             <Button
-            onClick={updateCart}
+            onClick={handleCheckout}
             type="button"
             className="w-full py-6 font-bold bg-red-500 rounded-sm hover:bg-red-600 cursor-pointer"
             >

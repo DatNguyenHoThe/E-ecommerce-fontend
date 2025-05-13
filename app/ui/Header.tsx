@@ -13,13 +13,13 @@ import { axiosClient } from '@/libs/axiosClient'
 import { env } from '@/libs/env.helper'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { ICart } from '../types/types'
+import { useCartStore } from '@/stores/useCartStore'
 
 export default function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const {user} = useAuthStore();
-  const [carts, setCarts] = useState<ICart | null>(null);
-  const [itemQty, setItemQty] = useState(0);
+  const {carts, itemQty, fetchCart} = useCartStore();
 
   //handle lấy value từ input và chuyển hướng
   const handleSearch = () => {
@@ -30,32 +30,12 @@ export default function Header() {
     }
   };
 
-  //----------------------BEGIN GET ALL CART-------------------------//
-      const fetchCarts = async(userId: string) => {
-        try {
-          const response = await axiosClient.get(`${env.API_URL}/carts/user/${userId}`);
-          if(response.status === 200) {
-            return response?.data?.data;
-          }
-        } catch (error) {
-          console.error('fetching carts is failed', error);
-        }
-      }
-      useEffect(() => {
-        if(user?._id === undefined) return;
-        const getCarts = async(userId: string) => {
-          const data = await fetchCarts(userId);
-          //đếm số lượng hàng trong giỏ và set item quantity
-          const itemCount = data?.items.reduce((total: number, item: any) => total + item.quantity, 0);
-          setItemQty(itemCount);
-          if(data) {
-            setCarts(data);
-          } 
-        }
-        getCarts(user?._id);
-      },[user?._id]);
-    //----------------------END GET ALL CART-------------------------//
-    
+  // fetch carts về khi user hoặc carts thay đổi
+  useEffect(() => {
+    if (user?._id) {
+      fetchCart(user._id);
+    }
+    }, [user?._id, fetchCart])
 
   return (
     <>
@@ -124,7 +104,7 @@ export default function Header() {
             </span>
           )}
         </div>
-      }
+        }
         title = {<>Giỏ<br />hàng</>}
         url = '/cart'
         />
