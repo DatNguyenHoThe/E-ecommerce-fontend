@@ -130,7 +130,7 @@ export default function PaymentComponent({ onNext }: { onNext: () => void }) {
     <div className="w-[800px] h-full">
         <div className="bg-white p-2 rounded-sm w-full flex flex-col gap-y-5">
           {orders && orders[0]?.paymentMethod === 'credit_card' && <CreditCardPayment onPaymentSuccess={setPaymentData} />}
-          {orders && orders[0]?.paymentMethod === 'paypal' && <PaypalPayment />}
+          {orders && orders[0]?.paymentMethod === 'paypal' && <PaypalPayment onPaymentSuccess={setPaymentData} />}
           {orders && orders[0]?.paymentMethod === 'cod' && <CodPayment />}
           
           {/* Thông tin giỏ hàng hiện tại cần thanh toán */}

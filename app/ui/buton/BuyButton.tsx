@@ -54,7 +54,7 @@ export default function BuyButton({
   return (
     <div className="mt-8">
       <button
-        className="w-[300px] py-2 bg-red-600 text-white font-semibold rounded-[3px]  cursor-pointer"
+        className="w-full py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300 cursor-pointer"
         onClick={handleAddToCart}
       >
         <h1 className="text-[15px]">MUA NGAY</h1>

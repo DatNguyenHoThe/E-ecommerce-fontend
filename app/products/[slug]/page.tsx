@@ -205,12 +205,11 @@ export default async function ProductDetailPage({
             )}
           </div>
 
-          <div className="mt-8">
-            <button className="w-full py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300 cursor-pointer">
-              <h2 className="">MUA NGAY</h2>
-              <h3 className="">Giao tận nơi hoặc nhận tại cửa hàng</h3>
-            </button>
-          </div>
+          <BuyButton 
+          productId={product._id}
+          price={product.price}
+          salePrice={product.salePrice}
+          />
 
           <div className="bg-gray-50 rounded-md text-sm p-4 mb-6 mt-6">
             <h3 className="font-semibold mb-2 text-gray-800">Mô tả sản phẩm</h3>

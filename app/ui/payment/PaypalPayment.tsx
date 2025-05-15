@@ -1,7 +1,77 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Wallet } from "lucide-react"
+import { useState } from "react";
+import { toast } from "sonner";
 
-export default function PaypalPayment() {
+//khai báo type để truyền data từ con lên cha
+interface PaypalPaymentProps {
+  onPaymentSuccess: (data: any) => void;
+}
+
+type TPaymentResponse = {
+  transactionId: string,
+  gateway: string,
+  method: string,
+  metadata: object,
+  payer: object
+}
+
+type TPaymentData = {
+  type: string,
+  gateway: string,
+  accountNumber: string,
+  expiryDate?: Date,
+  cardholderName: string,
+  isDefault: boolean,
+  transactionId: string
+}
+
+export default function PaypalPayment({onPaymentSuccess}: PaypalPaymentProps) {
+   const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Xử lý thanh toán
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      //Giả sử nhận được 1 response từ cổng thanh toán
+      const paymentResponse = {
+        transactionId: "paypal_123456789",
+        gateway: "Stripe",
+        method: "paypal",
+        metadata: {
+          href: "https://api.paypal.com/v1/payments/payment/8N497594MU965463H",
+          rel: "self",
+          method: "GET"
+        },
+        payer: {
+          payer_id: "W8E5F6J7K8L9M",
+          email: "nguyendat2025@gmail.com",
+          fullname: "Dat Nguyen"
+        }
+
+      };
+
+      //Lưu data vào PaymentData
+      const PaymentData = {
+        type: paymentResponse.method,
+        gateway: paymentResponse.gateway,
+        accountNumber: paymentResponse.payer.payer_id,
+        cardholderName: paymentResponse.payer.fullname,
+        isDefault: true,
+        transactionId: paymentResponse.transactionId,
+        metadata: paymentResponse.metadata
+      }
+      //Truyền lên paymentComponent
+      onPaymentSuccess(PaymentData);
+      //Thông báo & khóa nút thanh toán
+        toast.success('Bạn đã thanh toán thành công');
+    } catch (error) {
+      toast.error('Thanh toán thất bại, kiểm tra lại thông tin thanh toán');
+      setIsProcessing(false);
+    }
+  };
   return (
     <div className="space-y-6">
       <div className="bg-muted/50 p-6 rounded-lg">
@@ -19,7 +89,9 @@ export default function PaypalPayment() {
       <div className="space-y-4">
         <Button
           variant="outline"
-          className="w-full h-12 flex items-center justify-center gap-2 bg-[#ffc439] hover:bg-[#f0b92d] text-[#253b80] hover:text-[#253b80] border-[#ffc439]"
+          className="w-full h-12 flex items-center justify-center gap-2 bg-[#ffc439] hover:bg-[#f0b92d] text-[#253b80] hover:text-[#253b80] border-[#ffc439] cursor-pointer"
+          onClick={handlePayment}
+          disabled={isProcessing}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

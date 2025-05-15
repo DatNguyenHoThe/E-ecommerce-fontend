@@ -88,89 +88,13 @@ export default function CartPage() {
     getCarts(user?._id);
   },[user?._id]);
 
-  //----------------------BEGIN CLICK ADD TO CART-------------------------//
-  const createAddToCart = async(values: ICart): Promise<ICart | undefined> => {
-    const response = await axiosClient.post(`${env.API_URL}/carts`, values)
-    if(response.status === 201) {
-      alert('Thêm vào giỏ hàng thành công');
-      return response.data;
-    } else {
-      alert('Thêm vào giỏ hàng thất bại');
-    }
-  }
-  //Handle thêm vào giỏ hàng
-  const handleAddToCart = async(values: ICart) => {
-    const response = await createAddToCart(values);
-    //làm mới giỏ hàng
-    if(response && user?._id) {
-      const data = await fetchCarts(user?._id);
-      if(data) setCarts(data);
-    }
-  }
-
-  //lấy dữ liệu để truyền vào values
-
-  //----------------------END CLICK ADD TO CART-------------------------//
-
-  //----------------------BEGIN CART ITEMS-----------------------------//
   useEffect(() => {
     if (carts?.items) {
       setCartItems(carts.items);
       setTotalAmount(carts.totalAmount);
     }
   }, [carts]);
-  //Hàm tăng sản phẩm
-  const handleIncreaseQty = (itemId: string) => {
-    const updateCartItems = cartItems?.map((item) => {
-      if(item._id === itemId) {
-        const newQuantity = item.quantity + 1;
-        const newTotalAmount = item.product.salePrice * newQuantity;
-        console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-        setTotalAmount(totalAmount + item.product.salePrice);
-        return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
-      }
-      return item;
-  });
-  setCartItems(updateCartItems);
-  }
-  //Hàm giảm sản phẩm
-  const handleDecreaseQty = (itemId: string) => {
-    const updateCartItems = cartItems?.map((item) => {
-      if(item._id === itemId) {
-        const newQuantity = item.quantity > 1 ? item.quantity -1 : 1;
-        const newTotalAmount = item.product.salePrice * newQuantity;
-        console.log('newQuantity, newTotalAmount===>', newQuantity, newTotalAmount);
-        setTotalAmount(totalAmount - item.product.salePrice);
-        return {...item, quantity: newQuantity, totalAmount: newTotalAmount}
-      }
-      return item;
-  });
-  setCartItems(updateCartItems);
-  }
-  //Xóa sản phẩm
-  //Gọi API delete item
-  const deleteItem = async(itemId: string) => {
-    try {
-      const response = await axiosClient.delete(`${env.API_URL}/carts/user/${user?._id}/item/${itemId}`);
-      if(response.status === 200) {
-        alert('Xóa sản phẩm thành công');
-        return response.data;
-      } else {
-        alert('Xóa sản phẩm thất bại')
-      }
-    } catch (error) {
-      console.error('delete cartitem is failed');
-    }
-  }
-  //gọi hàm xóa sản phẩm
-  const handleDelete = async(itemId: string) => {
-    const response = await deleteItem(itemId);
-    if(response && user?._id) {
-      const updated = await fetchCarts(user?._id);
-      if(updated) setCartItems(updated)
-    }
-  }
-  //----------------------END CART ITEMS-----------------------------//
+
   
   return (
     <>
